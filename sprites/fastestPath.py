@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from maps.tiles import map_colors, collision_tiles
 
-def convert_map_to_coords_dict(map_dict) -> dict:
+def convert_map_to_coords_dict(map_dict: list) -> dict:
     coords = {}
     for r, row in enumerate(map_dict):
         for c, cell in enumerate(row):
