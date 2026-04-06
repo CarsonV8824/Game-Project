@@ -1,6 +1,6 @@
 import os
 from PySide6.QtWidgets import QApplication
-from menu.mainWindow import MainWindow
+from menus.mainWindow import MainWindow
 
 def show_menu():
     """Show the Qt menu in a separate function"""

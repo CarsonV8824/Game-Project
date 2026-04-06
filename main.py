@@ -1,5 +1,5 @@
 from game.runGame import run_game
-from sprites.menus import show_menu
+from menus.menus import show_menu
 import sys
 
 from sprites.fastestPath import shortest_path_networkx

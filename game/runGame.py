@@ -7,8 +7,8 @@ from sprites.basicEnemy import basicEnemy
 
 #pyside imports
 from PySide6.QtWidgets import QApplication, QWidget
-from menu.mainWindow import MainWindow
-from menu.pauseMenu import PauseMenu
+from menus.mainWindow import MainWindow
+from menus.pauseMenu import PauseMenu
 
 from sprites.fastestPath import shortest_path_networkx, convert_map_to_coords_dict
 #map stuff
