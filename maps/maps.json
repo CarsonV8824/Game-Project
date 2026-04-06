@@ -2,25 +2,34 @@
     "grasslands": {
         "map": 
         [
-            ["air", "leaves", "air", "air", "air", "air", "air", "air", "air", "air", "air"],
-            ["air", "log", "air", "air", "air", "objective", "air", "air", "air", "air", "air"],
-            ["green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land"]
+            ["enemy_spawn", "green_land", "log",        "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "log",        "enemy_spawn", "green_land", "green_land", "green_land", "green_land"],
+            ["green_land", "green_land", "log",        "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "log",        "green_land", "green_land", "green_land", "green_land", "green_land"],
+            ["green_land", "log",        "green_land", "green_land", "green_land", "green_land", "log",        "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "log",        "green_land"],
+            ["green_land", "green_land", "green_land", "green_land", "log",        "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "log",        "green_land", "green_land", "green_land"],
+            ["green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "objective",  "green_land", "green_land", "log",        "green_land", "green_land", "green_land", "green_land"],
+            ["log",        "green_land", "green_land", "green_land", "green_land", "log",        "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "log"]
         ]
     },
     "desert": {
         "map": 
         [
-            ["air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air"],
-            ["air", "cactus", "air", "air", "air", "objective", "air", "air", "air", "air", "air"],
-            ["sand", "sand", "sand", "sand", "sand", "sand", "sand", "sand", "sand", "sand", "sand"]
+            ["enemy_spawn", "sand", "cactus", "sand", "sand", "sand", "sand", "sand", "sand", "cactus", "sand", "sand", "enemy_spawn", "sand", "sand"],
+            ["sand", "sand", "cactus", "sand", "sand", "sand", "sand", "sand", "sand", "cactus", "sand", "sand", "sand", "sand", "sand"],
+            ["sand", "cactus", "sand", "sand", "sand", "sand", "cactus", "sand", "sand", "sand", "sand", "sand", "sand", "cactus", "sand"],
+            ["sand", "sand", "sand", "sand", "cactus", "sand", "sand", "sand", "sand", "sand", "sand", "cactus", "sand", "sand", "sand"],
+            ["sand", "sand", "sand", "sand", "sand", "sand", "sand", "objective", "sand", "sand", "cactus", "sand", "sand", "sand", "sand"],
+            ["cactus", "sand", "sand", "sand", "sand", "cactus", "sand", "sand", "sand", "sand", "sand", "sand", "sand", "sand", "cactus"]
         ]
     },
     "tundra": {
         "map": 
         [
-            ["air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air"],
-            ["air", "ice_block", "air", "air", "air", "objective", "air", "air", "air", "air", "air"],
-            ["snow", "snow", "snow", "snow", "snow", "snow", "snow", "snow", "snow", "snow", "snow"]
+            ["enemy_spawn", "snow", "ice_block", "snow", "snow", "snow", "snow", "snow", "snow", "ice_block", "snow", "snow", "enemy_spawn", "snow", "snow"],
+            ["snow", "snow", "ice_block", "snow", "snow", "snow", "snow", "snow", "snow", "ice_block", "snow", "snow", "snow", "snow", "snow"],
+            ["snow", "ice_block", "snow", "snow", "snow", "snow", "ice_block", "snow", "snow", "snow", "snow", "snow", "snow", "ice_block", "snow"],
+            ["snow", "snow", "snow", "snow", "ice_block", "snow", "snow", "snow", "snow", "snow", "snow", "ice_block", "snow", "snow", "snow"],
+            ["snow", "snow", "snow", "snow", "snow", "snow", "snow", "objective", "snow", "snow", "ice_block", "snow", "snow", "snow", "snow"],
+            ["ice_block", "snow", "snow", "snow", "snow", "ice_block", "snow", "snow", "snow", "snow", "snow", "snow", "snow", "snow", "ice_block"]
         ]
     }
 }

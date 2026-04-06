@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QVBoxLayout, QPushButton, QLabel
+from PySide6.QtCore import Qt
 
 class PauseMenu(QMainWindow):
     def __init__(self):
@@ -9,6 +10,7 @@ class PauseMenu(QMainWindow):
 
         layout = QVBoxLayout()
         label = QLabel("Game Paused")
+        label.setAlignment(Qt.AlignCenter)
 
         resume_button = QPushButton("Resume")
         resume_button.clicked.connect(self.ResumeClicked)

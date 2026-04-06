@@ -1,55 +1,79 @@
 import pygame
 import os
+import json
+
+maps_file_path = os.path.join("maps", "maps.json")
+
+def get_len_of_rows() -> int:
+    with open(maps_file_path, "r") as f:
+        maps_data = json.load(f)
+    return len(maps_data["grasslands"]["map"])
+
+def get_len_of_columns() -> int:
+    with open(maps_file_path, "r") as f:
+        maps_data = json.load(f)
+    return len(maps_data["grasslands"]["map"][0])
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x: int, y: int):
         super().__init__()
-        self.image = pygame.Surface((50, 50))
-        self.image.fill((255, 0, 0))
+        
+        self.base_image = pygame.Surface((50, 50))
+        self.base_image.fill((50, 50, 50))  
+        
+        pygame.draw.polygon(self.base_image, (255, 0, 0), [(25, 5), (35, 40), (15, 40)])
+        self.image = self.base_image.copy()
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
-
-        # Gravity system
-        self.vel_y = 0
-        self.gravity = 0.5
+        self.resources = {"wood": 0, "stone": 0, "water": 0}
+        self.angle = 0
+        self.rotation_speed = 2
+        self.movement_speed = 5
+        self.direction = pygame.math.Vector2(0, -1).rotate(self.angle)
 
     def update(self, SCREEN_WIDTH: int, SCREEN_HEIGHT: int) -> None:
         keys = pygame.key.get_pressed()
 
-        # Horizontal movement
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.rect.x -= 5
+            self.angle -= self.rotation_speed
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.rect.x += 5
+            self.angle += self.rotation_speed
+        
+        
+        self.direction = pygame.math.Vector2(0, -1).rotate(self.angle)
+        
+        
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
+            self.rect.x += self.direction.x * self.movement_speed
+            self.rect.y += self.direction.y * self.movement_speed
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            self.rect.x -= self.direction.x * self.movement_speed
+            self.rect.y -= self.direction.y * self.movement_speed
 
-        # Apply gravity
-        self.vel_y += self.gravity
-        self.rect.y += self.vel_y
+        
+        self.image = pygame.transform.rotate(self.base_image, -self.angle)
+        self.rect = self.image.get_rect(center=self.rect.center)
 
-        # Tile height (1/11th of screen width)
-        tile_h = SCREEN_WIDTH // 11
+        num_rows = get_len_of_rows()   
+        num_cols = get_len_of_columns()      
 
-        # Map top and bottom
-        map_top_y = SCREEN_HEIGHT - (tile_h * 3)
-        ground_y = SCREEN_HEIGHT - tile_h
+        # Use same tile calculation as makeMap.py
+        tile_size = SCREEN_WIDTH // num_cols
+        map_height = num_rows * tile_size
+        y_offset = SCREEN_HEIGHT - map_height
 
-        # --- Vertical collisions ---
-        # Ground collision
-        if self.rect.bottom >= ground_y:
-            self.rect.bottom = ground_y
-            self.vel_y = 0
+        # Player can move anywhere within the map bounds
+        map_top = y_offset
+        map_bottom = SCREEN_HEIGHT
 
-        # Ceiling collision (top of 3‑tile map)
-        if self.rect.top <= map_top_y:
-            self.rect.top = map_top_y
-            self.vel_y = 0
+        if self.rect.top < map_top:
+            self.rect.top = map_top
 
-        # --- Horizontal boundaries ---
+        if self.rect.bottom > map_bottom:
+            self.rect.bottom = map_bottom
+
         if self.rect.left < 0:
             self.rect.left = 0
+
         if self.rect.right > SCREEN_WIDTH:
             self.rect.right = SCREEN_WIDTH
-
-        # Jumping
-        if (keys[pygame.K_UP] or keys[pygame.K_w]) and self.vel_y == 0:
-            self.vel_y = -10

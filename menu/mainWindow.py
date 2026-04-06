@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QVBoxLayout, QPushButton, QLabel
+from PySide6.QtCore import Qt
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -8,6 +9,7 @@ class MainWindow(QMainWindow):
 
         layout = QVBoxLayout()
         label = QLabel("Welcome to the Tower Defense Game!")
+        label.setAlignment(Qt.AlignCenter)
 
         start_new_game_button = QPushButton("New Game")
         start_new_game_button.clicked.connect(self.NewClicked)
