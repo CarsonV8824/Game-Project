@@ -52,7 +52,8 @@ def grid_to_graph() -> nx.Graph:
 
     return G 
 
-def shortest_path_networkx(mapName="grasslands") -> list:
+def shortest_path_networkx(mapName="grasslands", start_pos=None):
+    """Get shortest path to objective. If start_pos is provided, return path from that specific spawn point."""
     map_dict = load_maps(mapName)
     start = [(r, c) for r, row in enumerate(map_dict) for c, cell in enumerate(row) if cell == "enemy_spawn"]
     goal_coords = [(r, c) for r, row in enumerate(map_dict) for c, cell in enumerate(row) if cell == "objective"]
@@ -69,12 +70,34 @@ def shortest_path_networkx(mapName="grasslands") -> list:
                 if map_dict[nr][nc] not in blocked:
                     adjacent_walkable.append((nr, nc))
     
-    final = []
-    if adjacent_walkable:
-        for pos in start:
-            G = grid_to_graph()
-            final.append(nx.shortest_path(G, source=pos, target=adjacent_walkable[0]))
+    if not adjacent_walkable or not start:
+        return []
     
+    G = grid_to_graph()
+    
+    # If a specific start position is provided, return path from that position
+    if start_pos and start_pos in start:
+        try:
+            path = nx.shortest_path(G, source=start_pos, target=adjacent_walkable[0])
+            # Append the objective as the final destination
+            if goal_coords:
+                path.append(goal_coords[0])
+            return path
+        except Exception as e:
+            print(f"Error finding shortest path: {e}")
+            return []
+    
+    # Otherwise return paths from all spawn points
+    final = []
+    for pos in start:
+        try:
+            path = nx.shortest_path(G, source=pos, target=adjacent_walkable[0])
+            # Append the objective as the final destination
+            if goal_coords:
+                path.append(goal_coords[0])
+            final.append(path)
+        except Exception as e:
+            print(f"Error finding shortest path: {e}")
     return final
 
 if __name__ == "__main__":

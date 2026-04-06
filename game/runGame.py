@@ -3,12 +3,14 @@ import pygame
 
 from sprites.player import Player
 from sprites.projectile import Projectile
+from sprites.basicEnemy import basicEnemy
 
 #pyside imports
 from PySide6.QtWidgets import QApplication, QWidget
 from menu.mainWindow import MainWindow
 from menu.pauseMenu import PauseMenu
 
+from sprites.fastestPath import shortest_path_networkx, convert_map_to_coords_dict
 #map stuff
 from maps.makeMap import load_maps, pygame_map
 
@@ -21,6 +23,19 @@ import subprocess
 import sys
 import os
 import traceback
+
+def convert_enemy_spawn_to_coords(map_dict: list) -> list:
+    coords = []
+    for r, row in enumerate(map_dict):
+        for c, cell in enumerate(row):
+            if cell == "enemy_spawn":
+                coords.append((r, c))
+    return coords
+
+def convert_map_coord_to_screen_coord(r: int, c: int, tile_size: int, y_offset: int) -> tuple:
+    x = c * tile_size + tile_size // 2 - 1
+    y = r * tile_size + y_offset + tile_size // 2
+    return (x, y)
 
 def run_game(get_loaded_game=False):
     """Run the Pygame game loop in a separate function"""
@@ -47,7 +62,13 @@ def run_game(get_loaded_game=False):
     back_to_menu = False
     player = Player(x=SCREEN_WIDTH//2, y=SCREEN_HEIGHT//2)
 
+    #sprite groups
     player_projectiles = pygame.sprite.Group()
+    basicEnemys = pygame.sprite.Group()
+
+    #Enemy spawn timers
+    BASIC_ENEMY_SPAWN_EVENT = pygame.USEREVENT + 1
+    pygame.time.set_timer(BASIC_ENEMY_SPAWN_EVENT, 5000)
 
     # Load map once before game loop
     maps_data = load_maps()
@@ -101,6 +122,17 @@ def run_game(get_loaded_game=False):
                         )
                         player_projectiles.add(projectile)
                         last_shot_time = current_time_shoot
+            if event.type == BASIC_ENEMY_SPAWN_EVENT:
+                spawn_coords = convert_enemy_spawn_to_coords(selected_map)
+                if spawn_coords:
+                    r, c = random.choice(spawn_coords)
+                    spawn_x, spawn_y = convert_map_coord_to_screen_coord(r, c, tile_size, y_offset)
+                    
+                    # Get path from this specific spawn location
+                    enemy_path = shortest_path_networkx(selected_map_name, start_pos=(r, c))
+                    
+                    basic_enemy = basicEnemy(spawn_x, spawn_y, path=enemy_path, tile_size=tile_size, y_offset=y_offset)
+                    basicEnemys.add(basic_enemy)
 
         screen.fill("black")
 
@@ -128,11 +160,19 @@ def run_game(get_loaded_game=False):
                 if current_tile in collision_tiles():
                     proj.kill()
 
+        collisions = pygame.sprite.groupcollide(player_projectiles, basicEnemys, True, True)
+        for projectile, enemies in collisions.items():
+            for enemy in enemies:
+                enemy.kill()
+            
+
         # RENDER YOUR GAME HERE
         pygame_map(screen, SCREEN_WIDTH, selected_map, SCREEN_HEIGHT)
         screen.blit(player.image, player.rect)
         player_projectiles.update(SCREEN_WIDTH=SCREEN_WIDTH, SCREEN_HEIGHT=SCREEN_HEIGHT)
         player_projectiles.draw(screen)
+        basicEnemys.update(tile_size=tile_size, y_offset=y_offset)
+        basicEnemys.draw(screen)
         # flip() the display to put your work on screen
         text_surface = font.render(f"FPS: {clock.get_fps():.1f}", True, (255, 255, 255))
         screen.blit(text_surface, (50, 50))
