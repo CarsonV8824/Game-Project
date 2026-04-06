@@ -1,0 +1,26 @@
+{
+    "grasslands": {
+        "map": 
+        [
+            ["air", "leaves", "air", "air", "air", "air", "air", "air", "air", "air", "air"],
+            ["air", "log", "air", "air", "air", "objective", "air", "air", "air", "air", "air"],
+            ["green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land", "green_land"]
+        ]
+    },
+    "desert": {
+        "map": 
+        [
+            ["air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air"],
+            ["air", "cactus", "air", "air", "air", "objective", "air", "air", "air", "air", "air"],
+            ["sand", "sand", "sand", "sand", "sand", "sand", "sand", "sand", "sand", "sand", "sand"]
+        ]
+    },
+    "tundra": {
+        "map": 
+        [
+            ["air", "air", "air", "air", "air", "air", "air", "air", "air", "air", "air"],
+            ["air", "ice_block", "air", "air", "air", "objective", "air", "air", "air", "air", "air"],
+            ["snow", "snow", "snow", "snow", "snow", "snow", "snow", "snow", "snow", "snow", "snow"]
+        ]
+    }
+}
