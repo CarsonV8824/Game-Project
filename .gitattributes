@@ -1,6 +1,0 @@
-*.json linguist-detectable=true
-*.json linguist-generated=true
-*.json linguist-vendored=true
-*.md linguist-detectable=true
-*.md linguist-generated=true
-*.md linguist-vendored=true
