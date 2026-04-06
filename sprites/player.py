@@ -68,7 +68,7 @@ class Player(pygame.sprite.Sprite):
 
         if self.rect.top < map_top:
             self.rect.top = map_top
-
+            
         if self.rect.bottom > map_bottom:
             self.rect.bottom = map_bottom
 
