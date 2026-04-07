@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QVBoxLayout, Q
 from PySide6.QtCore import Qt
 
 class PauseMenu(QMainWindow):
-    def __init__(self):
+    def __init__(self, screen_width, screen_height):
         super().__init__()
         
         self.quit = False
@@ -28,6 +28,9 @@ class PauseMenu(QMainWindow):
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
+        
+        # Set window size to match pygame screen dimensions
+        self.resize(screen_width, screen_height)
 
     def ResumeClicked(self) -> None:
         self.close()

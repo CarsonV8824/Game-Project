@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QVBoxLayout, QPushButton, QLabel
 from PySide6.QtCore import Qt
 
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -24,6 +25,11 @@ class MainWindow(QMainWindow):
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
+        
+        # Set window size to match screen dimensions
+        screen = QApplication.primaryScreen()
+        screen_geometry = screen.geometry()
+        self.resize(screen_geometry.width(), screen_geometry.height())
 
     def LoadedClicked(self) -> None:
         self.isLoadedGame = True

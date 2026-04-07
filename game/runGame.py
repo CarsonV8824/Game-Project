@@ -7,6 +7,7 @@ from sprites.basicEnemy import basicEnemy
 
 #pyside imports
 from PySide6.QtWidgets import QApplication, QWidget
+from PySide6.QtCore import Qt
 from menus.mainWindow import MainWindow
 from menus.pauseMenu import PauseMenu
 from menus.gameOver import GameOverScreen
@@ -55,7 +56,7 @@ def run_game(get_loaded_game:bool=False) -> bool:
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
 
-    current_wave = 4
+    current_wave = 1
     objective_health = 100
 
     shoot_cooldown = 200  # milliseconds
@@ -80,7 +81,10 @@ def run_game(get_loaded_game:bool=False) -> bool:
     wave_active = False
     wave_start_time = 0
     wave_downtime_end = 0  # Track when downtime ends
-    WAVE_DOWNTIME = 5000  # 5 seconds in milliseconds
+    WAVE_DOWNTIME = 15000 if current_wave % 5 == 0 and current_wave != 0 else 5000  # 5 seconds in milliseconds
+    
+    # Initialize downtime for first wave so timer displays
+    wave_downtime_end = pygame.time.get_ticks() + WAVE_DOWNTIME
 
     #Enemy spawn timers
     BASIC_ENEMY_SPAWN_EVENT = pygame.USEREVENT + 1
@@ -114,8 +118,11 @@ def run_game(get_loaded_game:bool=False) -> bool:
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    pause_menu = PauseMenu()
+                    pause_menu = PauseMenu(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    pause_menu.setWindowFlag(Qt.WindowStaysOnTopHint, True)
                     pause_menu.show()
+                    pause_menu.raise_()
+                    pause_menu.activateWindow()
                     app = QApplication.instance()
                     if app:
                         app.exec()
@@ -199,8 +206,10 @@ def run_game(get_loaded_game:bool=False) -> bool:
                 enemies_defeated_this_wave += 1
 
         if objective_health <= 0:
-            game_over_screen = GameOverScreen(score=current_wave)
+            game_over_screen = GameOverScreen(score=current_wave, screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT)
             game_over_screen.show()
+            game_over_screen.raise_()
+            game_over_screen.activateWindow()
             game_over_app = QApplication.instance()
             if game_over_app:
                 game_over_app.exec()
@@ -212,28 +221,35 @@ def run_game(get_loaded_game:bool=False) -> bool:
         # Check if wave is complete
         if wave_active and enemies_spawned_this_wave > 0:
             if enemies_spawned_this_wave == enemies_defeated_this_wave and len(basicEnemys) == 0:
+                # Prepare next wave
+                current_wave += 1
+                
+                # Change map every 5 waves
+                if current_wave % 5 == 0:
+                    WAVE_DOWNTIME = 15000
+                    selected_map_name = random.choice(map_names)
+                    selected_map = maps_data[selected_map_name]["map"]
+                    upgrades_menu = UpgradesMenu(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    upgrades_menu.setWindowFlag(Qt.WindowStaysOnTopHint, True)
+                    upgrades_menu.show()
+                    upgrades_menu.raise_()
+                    upgrades_menu.activateWindow()
+                    app = QApplication.instance()
+                    if app:
+                        app.exec()
+                else:
+                    WAVE_DOWNTIME = 5000  # Shorter downtime for regular waves
+                
                 # All enemies defeated, start downtime
                 wave_active = False
                 wave_downtime_end = pygame.time.get_ticks() + WAVE_DOWNTIME
                 
-                # Prepare next wave
-                current_wave += 1
                 enemies_spawned_this_wave = 0
                 enemies_defeated_this_wave = 0
                 
                 # Update spawn rate for new wave
                 spawn_rate = get_spawn_rate_for_wave(current_wave)
                 pygame.time.set_timer(BASIC_ENEMY_SPAWN_EVENT, spawn_rate)
-                
-                # Change map every 5 waves
-                if current_wave % 5 == 0:
-                    selected_map_name = random.choice(map_names)
-                    selected_map = maps_data[selected_map_name]["map"]
-                    upgrades_menu = UpgradesMenu()
-                    upgrades_menu.show()
-                    upgrades_app = QApplication.instance()
-                    if upgrades_app:
-                        upgrades_app.exec()
         
         # Auto-start next wave after downtime
         current_time = pygame.time.get_ticks()

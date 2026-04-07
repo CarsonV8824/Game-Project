@@ -1,8 +1,9 @@
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QVBoxLayout, QPushButton, QLabel
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QKeyEvent
 
 class UpgradesMenu(QMainWindow):
-    def __init__(self):
+    def __init__(self, screen_width, screen_height):
         super().__init__()
 
         self.isUpgradeSelected = False
@@ -24,6 +25,13 @@ class UpgradesMenu(QMainWindow):
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
+
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        """Override keyPressEvent to prevent spacebar from triggering button clicks"""
+        if event.key() == Qt.Key_Space:
+            event.ignore()
+        else:
+            super().keyPressEvent(event)
 
     def Upgrade1Clicked(self) -> None:
         self.isUpgradeSelected = True

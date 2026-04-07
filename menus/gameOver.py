@@ -2,13 +2,19 @@ from PySide6.QtWidgets import QApplication, QPushButton, QLabel, QMainWindow, QV
 from PySide6.QtCore import Qt
 from menus.mainWindow import MainWindow
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 class GameOverScreen(QMainWindow):
-    def __init__(self, score):
+    def __init__(self, score, screen_width, screen_height):
         super().__init__()
         self.setWindowTitle("Game Over")
         self.score = score
         self.init_ui()
         self.isMainMenu = False
+        
+        # Set window size to match pygame screen dimensions
+        self.resize(screen_width, screen_height)
 
     def init_ui(self):
         # Create a central widget and layout

@@ -1,18 +1,74 @@
+/* ===========================
+   GLOBAL WIDGET STYLE
+   =========================== */
 QWidget {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    background-color: #1b1b1b;              /* Dark arcade backdrop */
+    border: 4px solid #3a3a3a;              /* Chunky pixel border */
+    border-radius: 0px;                     /* Pixel style = no rounding */
+    font-family: "Press Start 2P", monospace; /* Pixel font (fallback monospace) */
+    color: #e0e0e0;
 }
 
+/* ===========================
+   BUTTONS — PIXEL RETRO
+   =========================== */
 QPushButton {
     width: 200px;
     height: 50px;
-    background-color: #4CAF50;
+    background-color: #2d89ef;             /* Bright retro blue */
     color: white;
+    border: 4px solid #1a4a8a;             /* Darker pixel border */
+    border-radius: 0px;
+    padding: 5px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
+QPushButton:hover {
+    background-color: #3aa0ff;             /* Lighter hover blue */
+    border-color: #62c0ff;
+}
+
+QPushButton:pressed {
+    background-color: #1a4a8a;             /* Dark pressed state */
+    border-color: #0e2a4a;
+    color: #c0c0c0;
+}
+
+/* ===========================
+   LABELS — RETRO TITLES
+   =========================== */
 QLabel {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
-    color: rgb(50, 50, 50);
+    color: #ffdd55;                         /* Retro yellow */
+    text-shadow: 2px 2px #000000;           /* Pixel shadow */
+}
+
+/* ===========================
+   PANELS / FRAMES
+   =========================== */
+QFrame {
+    background-color: #262626;
+    border: 4px solid #444444;
+    border-radius: 0px;
+}
+
+/* ===========================
+   UPGRADE CARDS (OPTIONAL)
+   =========================== */
+QGroupBox {
+    background-color: #303030;
+    border: 4px solid #555555;
+    border-radius: 0px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #ffdd55;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0px 5px;
+    background-color: #303030;
 }

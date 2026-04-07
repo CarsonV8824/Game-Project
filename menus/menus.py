@@ -12,7 +12,6 @@ def show_menu():
 
     window = MainWindow()
     window.setWindowTitle("Tower Defense Game")
-    window.resize(400, 300)                        
 
     window.show()
     
