@@ -4,6 +4,18 @@ from menus.mainWindow import MainWindow
 
 import matplotlib.pyplot as plt
 import seaborn as sns
+from matplotlib.backends.backend_qtagg import FigureCanvas
+from matplotlib.figure import Figure
+
+#https://stackoverflow.com/questions/68915122/placing-a-seaborn-figure-within-a-pyqt5-widget
+#https://www.pythonguis.com/tutorials/pyside6-plotting-matplotlib/
+
+class MplCanvas(FigureCanvas):
+
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(111)
+        super().__init__(fig)
 
 class GameOverScreen(QMainWindow):
     def __init__(self, score, screen_width, screen_height):
@@ -30,6 +42,11 @@ class GameOverScreen(QMainWindow):
         self.menu_button = QPushButton("Return to Main Menu")
         self.menu_button.clicked.connect(self.return_to_menu)
         layout.addWidget(self.menu_button)
+
+        sc = MplCanvas(self, width=5, height=4, dpi=100)
+        sc.axes.plot([self.score])
+        layout.addWidget(sc)
+        self.show()
         
         # Set the layout and central widget
         central_widget.setLayout(layout)

@@ -52,9 +52,12 @@ def grid_to_graph() -> nx.Graph:
 
     return G 
 
-def shortest_path_networkx(mapName="grasslands", start_pos=None):
+def shortest_path_networkx(gameMap=None, mapName="grasslands", start_pos=None):
     """Get shortest path to objective. If start_pos is provided, return path from that specific spawn point."""
-    map_dict = load_maps(mapName)
+    if gameMap is not None:
+        map_dict = gameMap
+    else:
+        map_dict = load_maps(mapName)
     start = [(r, c) for r, row in enumerate(map_dict) for c, cell in enumerate(row) if cell == "enemy_spawn"]
     goal_coords = [(r, c) for r, row in enumerate(map_dict) for c, cell in enumerate(row) if cell == "objective"]
     
