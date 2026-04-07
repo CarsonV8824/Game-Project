@@ -1,1 +1,3 @@
 import torch
+
+#https://www.google.com/search?q=training+a+model+off+of+a+2d+array+map+in+pytorch&sca_esv=f77eb908d38b3c2a&sxsrf=ANbL-n6_g2l9m119nJv8Lk60WRu4aZFSxQ%3A1775583608916&ei=eEHVaZ-6N_a3qtsPy7G76Aw&biw=1280&bih=665&ved=0ahUKEwif1pyypNyTAxX2m2oFHcvYDs0Q4dUDCBE&uact=5&oq=training+a+model+off+of+a+2d+array+map+in+pytorch&gs_lp=Egxnd3Mtd2l6LXNlcnAiMXRyYWluaW5nIGEgbW9kZWwgb2ZmIG9mIGEgMmQgYXJyYXkgbWFwIGluIHB5dG9yY2gyCBAAGIAEGKIESLsUULwHWMIScAF4AZABAJgBd6AB1gWqAQMzLjS4AQPIAQD4AQGYAgigAu8FwgIKEAAYsAMY1gQYR8ICChAhGKABGMMEGArCAgcQIxiwAhgnwgIIECEYoAEYwwSYAwCIBgGQBgiSBwMzLjWgB7oesgcDMi41uAfrBcIHAzMuNcgHC4AIAA&sclient=gws-wiz-serp
