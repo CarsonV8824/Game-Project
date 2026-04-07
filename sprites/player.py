@@ -27,7 +27,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = (x, y)
         self.resources = {"wood": 0, "stone": 0, "water": 0}
         self.angle = 0
-        self.rotation_speed = 2
+        self.rotation_speed = 4
         self.movement_speed = 5
         self.direction = pygame.math.Vector2(0, -1).rotate(self.angle)
 

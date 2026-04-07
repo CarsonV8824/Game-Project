@@ -9,6 +9,8 @@ from sprites.basicEnemy import basicEnemy
 from PySide6.QtWidgets import QApplication, QWidget
 from menus.mainWindow import MainWindow
 from menus.pauseMenu import PauseMenu
+from menus.gameOver import GameOverScreen
+from menus.upgradesMenu import UpgradesMenu
 
 from sprites.fastestPath import shortest_path_networkx, convert_map_to_coords_dict
 #map stuff
@@ -37,7 +39,7 @@ def convert_map_coord_to_screen_coord(r: int, c: int, tile_size: int, y_offset: 
     y = r * tile_size + y_offset + tile_size // 2
     return (x, y)
 
-def run_game(get_loaded_game=False):
+def run_game(get_loaded_game:bool=False) -> bool:
     """Run the Pygame game loop in a separate function"""
     # Initialize pygame with SDL settings
     os.environ['SDL_VIDEODRIVER'] = 'windows'
@@ -53,7 +55,7 @@ def run_game(get_loaded_game=False):
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
 
-    current_wave = 1
+    current_wave = 4
     objective_health = 100
 
     shoot_cooldown = 200  # milliseconds
@@ -89,7 +91,7 @@ def run_game(get_loaded_game=False):
     map_names = list(maps_data.keys())
     selected_map_name = random.choice(map_names)
     selected_map = maps_data[selected_map_name]["map"]
-    
+
     # Pre-calculate map constants (these don't change)
     num_cols = len(selected_map[0])
     num_rows = len(selected_map)
@@ -195,6 +197,17 @@ def run_game(get_loaded_game=False):
                 enemy.kill()
                 projectile.kill()
                 enemies_defeated_this_wave += 1
+
+        if objective_health <= 0:
+            game_over_screen = GameOverScreen(score=current_wave)
+            game_over_screen.show()
+            game_over_app = QApplication.instance()
+            if game_over_app:
+                game_over_app.exec()
+            if game_over_screen.getIsMainMenu():
+                back_to_menu = True
+                running = False
+            running = False
         
         # Check if wave is complete
         if wave_active and enemies_spawned_this_wave > 0:
@@ -211,6 +224,16 @@ def run_game(get_loaded_game=False):
                 # Update spawn rate for new wave
                 spawn_rate = get_spawn_rate_for_wave(current_wave)
                 pygame.time.set_timer(BASIC_ENEMY_SPAWN_EVENT, spawn_rate)
+                
+                # Change map every 5 waves
+                if current_wave % 5 == 0:
+                    selected_map_name = random.choice(map_names)
+                    selected_map = maps_data[selected_map_name]["map"]
+                    upgrades_menu = UpgradesMenu()
+                    upgrades_menu.show()
+                    upgrades_app = QApplication.instance()
+                    if upgrades_app:
+                        upgrades_app.exec()
         
         # Auto-start next wave after downtime
         current_time = pygame.time.get_ticks()
@@ -218,10 +241,10 @@ def run_game(get_loaded_game=False):
             wave_active = True
             wave_downtime_end = 0
         
-        # Start first wave automatically
-        if not wave_active and current_wave == 1 and wave_downtime_end == 0:
+        # Start wave automatically (works for any wave, not just wave 1)
+        if not wave_active and wave_downtime_end == 0:
             wave_active = True
-            
+
         pygame_map(screen, SCREEN_WIDTH, selected_map, SCREEN_HEIGHT)
         screen.blit(player.image, player.rect)
         player_projectiles.update(SCREEN_WIDTH=SCREEN_WIDTH, SCREEN_HEIGHT=SCREEN_HEIGHT)
